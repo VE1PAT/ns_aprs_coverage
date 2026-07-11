@@ -1,0 +1,242 @@
+﻿[
+    {
+        "name":  "VE1TPL",
+        "lat":  "45.54283",
+        "lng":  "-64.09367",
+        "lasttime":  "1769919759",
+        "comment":  "Lynn Mtn,NS MARCAN UDIGI TPARC",
+        "phg":  "5450",
+        "path":  "WIDE3-3,qAO,VE1AIC-6",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1TRO",
+        "lat":  "45.5535",
+        "lng":  "-63.22383",
+        "lasttime":  "1783705230",
+        "comment":  "Nuttby Mtn, NS MARCAN UIDIGI",
+        "phg":  "5460",
+        "path":  "WIDE3-3,qAO,VE1AIC-14",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1EXP",
+        "lat":  "45.68133",
+        "lng":  "-61.9785",
+        "lasttime":  "1783704424",
+        "comment":  "Fairmont,NS MARCAN UIDIGI NSARA",
+        "phg":  "5494",
+        "path":  "VE1JCF*,WIDE3-2,qAO,VE1AIC-14",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1MTT",
+        "lat":  "44.91567",
+        "lng":  "-63.71633",
+        "lasttime":  "1783705417",
+        "comment":  "Beaverbank, NS MARCAN UIDIGI TPARC",
+        "phg":  "5460",
+        "path":  "VE1TRO*,WIDE3-2,qAO,VE1AIC-14",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1AEH",
+        "lat":  "45.1695",
+        "lng":  "-64.5155",
+        "lasttime":  "1783705261",
+        "comment":  "Glenmont,NS MARCAN UIDIGI KCARC",
+        "phg":  "5323",
+        "path":  "VE1VZ*,WIDE3-2,qAR,VE1DIY-10",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1ARC",
+        "lat":  "45.017",
+        "lng":  "-65.00317",
+        "lasttime":  "1783704845",
+        "comment":  "W3 Greenwood,NS MARCAN UIDIGI GARC",
+        "phg":  "5230",
+        "path":  "WIDE3-3,qAR,VE1DIY-10",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1YAR",
+        "lat":  "43.9445",
+        "lng":  "-66.022",
+        "lasttime":  "1783704316",
+        "comment":  "Yarmouth,NS MARCAN UIDIGI YARC",
+        "phg":  "5460",
+        "path":  "WIDE3-3,qAR,VE1DCD-1",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1PKT",
+        "lat":  "44.73183",
+        "lng":  "-63.80083",
+        "lasttime":  "1783704480",
+        "comment":  "Halifax, NS MARCAN UIDIGI NSARA",
+        "phg":  "5460",
+        "path":  "VE1VO,VE1VZ*,WIDE3-1,qAR,VE1DIY-10",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1AAQ",
+        "lat":  "44.6455",
+        "lng":  "-64.88433",
+        "lasttime":  "1783705256",
+        "comment":  "Springfield,NS MARCAN UIDIGI NSARA",
+        "phg":  "5460",
+        "path":  "VE9GFI-2*,WIDE3-2,qAR,VE9GM-4",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1VZ",
+        "lat":  "44.87617",
+        "lng":  "-65.30633",
+        "lasttime":  "1783705446",
+        "comment":  "Bridgetown,NS MARCAN UIDIGI NSARA",
+        "phg":  "5493",
+        "path":  "WIDE3-3,qAR,VE1DIY-10",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1ALB",
+        "lat":  "44.49883",
+        "lng":  "-65.83233",
+        "lasttime":  "1759607038",
+        "comment":  "W3 Digby,NS MARCAN UIDIGI NSARA",
+        "phg":  "5460",
+        "path":  "WIDE3-3,qAR,VE1DIY-10",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VA1BAR",
+        "lat":  "43.57367",
+        "lng":  "-65.53967",
+        "lasttime":  "1783704709",
+        "comment":  "Barrington,NS MARCAN UIDIGI YARC",
+        "phg":  "5460",
+        "path":  "VE1EKV,VA1COR*,WIDE3-1,qAR,VE1GX-1",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1EKV",
+        "lat":  "44.079",
+        "lng":  "-65.78033",
+        "lasttime":  "1783704875",
+        "comment":  "East Kemptville,NS MARCAN UIDIGI YARC",
+        "phg":  "5460",
+        "path":  "WIDE3-3,qAR,VE1DCD-1",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1MHR",
+        "lat":  "44.807",
+        "lng":  "-63.17933",
+        "lasttime":  "1783704800",
+        "comment":  "Jerusalem Hill,NS MARCAN UIDIGI \u003cNSARA\u003e",
+        "phg":  "5490",
+        "path":  "VE1TRO*,WIDE3-2,qAO,VY2WTF-2",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1BBY",
+        "lat":  "43.859",
+        "lng":  "-64.99083",
+        "lasttime":  "1783705284",
+        "comment":  "Granite Village,NS MARCAN UIDIGI NSARA",
+        "phg":  "5460",
+        "path":  "WIDE3-3,qAO,VE1DAD-10",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1GYS",
+        "lat":  "45.31833",
+        "lng":  "-61.47567",
+        "lasttime":  "1783704943",
+        "comment":  "Lundy,NS MARCAN UIDIGI NSARA",
+        "phg":  "5460",
+        "path":  "VE1JCF,VE1TRO*,WIDE3-1,qAO,VE1AIC-14",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1OBN",
+        "lat":  "45.7385",
+        "lng":  "-60.90833",
+        "lasttime":  "1783704950",
+        "comment":  "Oban,NS MARCAN UIDIGI NSARA",
+        "phg":  "5460",
+        "path":  "VE1EXP,VE1JCF*,WIDE3-1,qAO,VE1AIC-6",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1LUN",
+        "lat":  "44.72033",
+        "lng":  "-64.29867",
+        "lasttime":  "1783705488",
+        "comment":  "Sherwood,NS MARCAN UIDIGI NSARA",
+        "phg":  "5460",
+        "path":  "VE1BBY*,WIDE3-2,qAO,VE1DAD-10",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1VO",
+        "lat":  "44.06783",
+        "lng":  "-64.719",
+        "lasttime":  "1783704830",
+        "comment":  "Liverpool,NS MARCAN UIDIGI NSARA",
+        "phg":  "5460",
+        "path":  "VE1EKV,VA1COR*,WIDE3-1,qAR,VE1GX-1",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1JCF",
+        "lat":  "45.40583",
+        "lng":  "-62.202",
+        "lasttime":  "1783704341",
+        "comment":  "Rocky Mtn, NS MARCAN UIDIGI PCARC/NSARA",
+        "phg":  "5460",
+        "path":  "VE1TRO*,WIDE3-2,qAO,VE1AIC-14",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1BHS",
+        "lat":  "45.58017",
+        "lng":  "-63.80367",
+        "lasttime":  "1783015243",
+        "comment":  "Sugarloaf,NS MARCAN UIDIGI NSARA",
+        "phg":  "5497",
+        "path":  "WIDE3-3,qAO,VE1AIC-14",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VA1COR",
+        "lat":  "44.26333",
+        "lng":  "-65.90283",
+        "lasttime":  "1783704514",
+        "comment":  "Corberrie,NS MARCAN UIDIGI YARC",
+        "phg":  "5460",
+        "path":  "VE1VZ*,WIDE3-2,qAR,VE1DIY-10",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1XK",
+        "lat":  "45.31",
+        "lng":  "-63.333",
+        "lasttime":  "1783705139",
+        "comment":  "Hilden, NS MARCAN UIDIGI TARC",
+        "phg":  "5460",
+        "path":  "WIDE3-3,qAO,VE1AIC-14",
+        "symbol":  "S#"
+    },
+    {
+        "name":  "VE1HCA",
+        "lat":  "44.94717",
+        "lng":  "-63.93183",
+        "lasttime":  "1783704642",
+        "comment":  "Willow Hill, NS MARCAN UIDIGI NSARA",
+        "phg":  "31302",
+        "path":  "VE1TRO*,WIDE3-2,qAO,VE1AIC-6",
+        "symbol":  "S#"
+    }
+]
