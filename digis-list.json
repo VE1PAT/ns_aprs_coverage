@@ -1,0 +1,41 @@
+{
+  "title": "Nova Scotia MARCAN digipeaters",
+  "sources": [
+    {
+      "name": "MARCAN APRS page (ve1cra.net)",
+      "url": "http://ve1cra.net/aprs/"
+    },
+    {
+      "name": "aprs.fi live map",
+      "url": "https://aprs.fi/"
+    }
+  ],
+  "notes": "One callsign per line in the app editor. Add or remove digis anytime, then click Update map.",
+  "callsigns": [
+    "VE1TPL",
+    "VE1TRO",
+    "VE1EXP",
+    "VE1MTT",
+    "VE1AEH",
+    "VE1ARC",
+    "VE1YAR",
+    "VE1PKT",
+    "VE1AAQ",
+    "VE1VZ",
+    "VE1ALB",
+    "VA1BAR",
+    "VE1EKV",
+    "VE1MHR",
+    "VE1BBY",
+    "VE1GYS",
+    "VE1OBN",
+    "VE1LUN",
+    "VE1VO",
+    "VE1JCF",
+    "VE1BHS",
+    "VA1COR",
+    "VE1XK",
+    "VE1HCA",
+    "VE1ZX"
+  ]
+}

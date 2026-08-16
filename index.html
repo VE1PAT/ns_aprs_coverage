@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nova Scotia APRS Digipeater Coverage (MARCAN)</title>
+  <title>Nova Scotia APRS Digipeater Coverage</title>
   <link rel="icon" href="favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" href="favicon-32.png" sizes="32x32" />
   <link rel="apple-touch-icon" href="favicon-180.png" />
@@ -17,7 +17,7 @@
       --line: #d9d2c5;
       --accent: #0b5f4b;
       --stale: #8a4b2a;
-      --circle: #0b5f4b;
+      --danger: #8b1e1e;
     }
     * { box-sizing: border-box; }
     html, body { height: 100%; margin: 0; }
@@ -26,7 +26,7 @@
       color: var(--ink);
       background: var(--bg);
       display: grid;
-      grid-template-columns: 320px 1fr;
+      grid-template-columns: 360px 1fr;
       grid-template-rows: auto 1fr;
       grid-template-areas:
         "header header"
@@ -46,13 +46,12 @@
       margin: 0;
       font-size: 1.15rem;
       font-weight: 650;
-      letter-spacing: 0.01em;
     }
     header p {
       margin: 0;
       color: var(--muted);
       font-size: 0.88rem;
-      max-width: 62ch;
+      max-width: 70ch;
     }
     aside {
       grid-area: side;
@@ -78,26 +77,53 @@
       margin: 6px 0;
       font-size: 0.92rem;
     }
-    select, button {
+    label.field {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+    input[type="text"],
+    input[type="password"],
+    textarea,
+    select,
+    button {
       font: inherit;
       padding: 7px 10px;
       border: 1px solid var(--line);
       border-radius: 6px;
       background: white;
       color: var(--ink);
+      width: 100%;
     }
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+      line-height: 1.35;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.85rem;
+    }
+    textarea.tall { min-height: 160px; }
     button {
       cursor: pointer;
       background: var(--accent);
       color: white;
       border-color: var(--accent);
-      width: 100%;
       margin-top: 8px;
+    }
+    button:disabled {
+      opacity: 0.55;
+      cursor: wait;
     }
     button.secondary {
       background: white;
       color: var(--ink);
       border-color: var(--line);
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
     }
     .stats {
       display: grid;
@@ -123,7 +149,7 @@
       list-style: none;
       margin: 0;
       padding: 0;
-      max-height: 42vh;
+      max-height: 28vh;
       overflow: auto;
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -153,15 +179,34 @@
       color: var(--muted);
       line-height: 1.4;
     }
+    .status {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      line-height: 1.35;
+      min-height: 1.2em;
+    }
+    .status.ok { color: var(--accent); }
+    .status.err { color: var(--danger); }
+    .status.info { color: var(--muted); }
+    .sources a {
+      color: var(--accent);
+      word-break: break-all;
+    }
+    details.setup > summary {
+      cursor: pointer;
+      font-weight: 650;
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+    }
     .leaflet-container { background: #dfe8e2; }
-    @media (max-width: 860px) {
+    @media (max-width: 900px) {
       body {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto 1fr;
         grid-template-areas: "header" "side" "map";
       }
-      aside { max-height: 40vh; border-right: 0; border-bottom: 1px solid var(--line); }
-      #map { min-height: 55vh; }
+      aside { max-height: 48vh; border-right: 0; border-bottom: 1px solid var(--line); }
+      #map { min-height: 50vh; }
     }
   </style>
 </head>
@@ -169,19 +214,53 @@
   <header>
     <h1>Nova Scotia APRS digipeater coverage</h1>
     <p>
-      MARCAN UIDIGI nodes from aprs.fi API. Circles are PHG-based planning estimates
-      (not terrain-aware RF coverage). Use for gap/overlap discussion with NSARA.
+      Paste your free aprs.fi API key, edit the digi list, then click Update map.
+      Circles are PHG planning estimates — not terrain-aware RF coverage.
     </p>
   </header>
 
   <aside>
+    <div class="block">
+      <details class="setup" open>
+        <summary>Update from aprs.fi</summary>
+        <p class="note" id="serverHint">
+          Start with <code>start.bat</code> (or <code>node server.mjs</code>) so Update map can reach aprs.fi.
+        </p>
+
+        <label class="field" for="apiKey">Your aprs.fi API key</label>
+        <input id="apiKey" type="password" autocomplete="off" placeholder="Paste key from aprs.fi account page" />
+        <label class="row"><input type="checkbox" id="showKey" /> Show key</label>
+        <div class="btn-row">
+          <button type="button" class="secondary" id="saveKeyBtn">Remember key</button>
+          <button type="button" class="secondary" id="clearKeyBtn">Forget key</button>
+        </div>
+        <p class="note">Stored only in this browser (localStorage). Never committed to Git.</p>
+
+        <label class="field" for="listTitle" style="margin-top:12px;">List title</label>
+        <input id="listTitle" type="text" />
+
+        <label class="field" for="sourcesText" style="margin-top:10px;">Reference URLs (one per line: name | url)</label>
+        <textarea id="sourcesText" placeholder="MARCAN APRS page | http://ve1cra.net/aprs/"></textarea>
+
+        <label class="field" for="callsignsText" style="margin-top:10px;">Digi callsigns (one per line)</label>
+        <textarea id="callsignsText" class="tall" placeholder="VE1LUN&#10;VE1TRO&#10;VE1PKT"></textarea>
+
+        <div class="btn-row">
+          <button type="button" class="secondary" id="saveListBtn">Save digi list</button>
+          <button type="button" id="refreshBtn">Update map</button>
+        </div>
+        <p class="status info" id="actionStatus"></p>
+        <div class="sources note" id="sourcesView"></div>
+      </details>
+    </div>
+
     <div class="block">
       <h2>Display</h2>
       <label class="row"><input type="checkbox" id="showCircles" checked /> Coverage circles</label>
       <label class="row"><input type="checkbox" id="showStale" checked /> Include stale / quiet digis</label>
       <label class="row"><input type="checkbox" id="fillCircles" checked /> Fill overlaps</label>
       <label class="row" style="margin-top:10px;">Range mode
-        <select id="rangeMode" style="margin-left:auto; min-width:140px;">
+        <select id="rangeMode" style="margin-left:auto; min-width:140px; width:auto;">
           <option value="phg" selected>PHG estimate</option>
           <option value="40">Fixed 40 km</option>
           <option value="60">Fixed 60 km</option>
@@ -200,27 +279,24 @@
         <div class="stat"><b id="statAvg">0</b><span>Avg PHG range (km)</span></div>
       </div>
       <p class="note" id="fetchedAt" style="margin-top:10px;"></p>
+      <p class="note" id="missingNote"></p>
     </div>
 
     <div class="block">
       <h2>Stations</h2>
       <ul class="list" id="stationList"></ul>
     </div>
-
-    <p class="note">
-      Source: aprs.fi location API · PHG decoded to approximate omni range.
-      VE1ZX not returned by API (not found). Overlaps look denser than real VHF
-      coverage because hills and coastlines are ignored.
-    </p>
   </aside>
 
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // Embedded snapshot from aprs.fi API (no API key in this file).
-    const FETCHED_AT = "2026-07-10T17:45:00Z";
-    const DIGIS = [
+    const KEY_STORAGE = "nsAprsCoverage.apiKey";
+    const STALE_AFTER_SEC = 7 * 24 * 3600;
+
+    // Offline fallback if digis-raw.json is missing.
+    const FALLBACK_DIGIS = [
       {"name":"VE1TPL","lat":45.54283,"lng":-64.09367,"lasttime":1769919759,"phg":"5450","comment":"Lynn Mtn,NS MARCAN UDIGI TPARC"},
       {"name":"VE1TRO","lat":45.5535,"lng":-63.22383,"lasttime":1783705230,"phg":"5460","comment":"Nuttby Mtn, NS MARCAN UIDIGI"},
       {"name":"VE1EXP","lat":45.68133,"lng":-61.9785,"lasttime":1783704424,"phg":"5494","comment":"Fairmont,NS MARCAN UIDIGI NSARA"},
@@ -247,7 +323,20 @@
       {"name":"VE1HCA","lat":44.94717,"lng":-63.93183,"lasttime":1783704642,"phg":"3130","comment":"Willow Hill, NS MARCAN UIDIGI NSARA"}
     ];
 
-    // APRS PHG decode + Bruninga-style range estimate (miles -> km).
+    let digis = FALLBACK_DIGIS.slice();
+    let fetchedAt = "bundled snapshot";
+    let missing = [];
+    let enriched = [];
+    let serverAvailable = false;
+
+    const map = L.map("map", { zoomControl: true }).setView([45.0, -63.2], 7);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 14,
+      attribution: "&copy; OpenStreetMap · digi data aprs.fi"
+    }).addTo(map);
+    const layer = L.layerGroup().addTo(map);
+    const markers = new Map();
+
     function decodePhg(phgRaw) {
       if (!phgRaw) return null;
       const digits = String(phgRaw).replace(/\D/g, "").slice(0, 4);
@@ -256,7 +345,6 @@
       const powerW = p * p;
       const haatFt = 10 * Math.pow(2, h);
       const gainDb = g;
-      // Common APRS planning formula (approximate omni range in miles).
       const rangeMiles = Math.sqrt(2 * haatFt) * Math.sqrt(powerW / 10) * (1 + gainDb / 10) / 2;
       const rangeKm = rangeMiles * 1.60934;
       return {
@@ -265,30 +353,76 @@
       };
     }
 
-    const STALE_AFTER_SEC = 7 * 24 * 3600;
-    const nowSec = Math.floor(Date.now() / 1000);
+    function setStatus(msg, kind = "info") {
+      const el = document.getElementById("actionStatus");
+      el.textContent = msg || "";
+      el.className = "status " + kind;
+    }
 
-    const enriched = DIGIS.map((d) => {
-      const phg = decodePhg(d.phg);
-      const ageSec = nowSec - (+d.lasttime || 0);
-      const onAir = ageSec >= 0 && ageSec <= STALE_AFTER_SEC;
-      return {
-        ...d,
-        phgDecoded: phg,
-        phgRangeKm: phg ? Math.round(phg.rangeKm) : 50,
-        onAir,
-        ageDays: Math.max(0, Math.round(ageSec / 86400))
-      };
-    }).sort((a, b) => a.name.localeCompare(b.name));
+    function parseCallsignsText(text) {
+      const seen = new Set();
+      const out = [];
+      for (const line of String(text || "").split(/\r?\n/)) {
+        const cleaned = line.replace(/#.*$/, "").trim().toUpperCase().replace(/[^A-Z0-9-]/g, "");
+        if (!cleaned || seen.has(cleaned)) continue;
+        seen.add(cleaned);
+        out.push(cleaned);
+      }
+      return out;
+    }
 
-    const map = L.map("map", { zoomControl: true }).setView([45.0, -63.2], 7);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 14,
-      attribution: "&copy; OpenStreetMap · digi data aprs.fi"
-    }).addTo(map);
+    function parseSourcesText(text) {
+      const out = [];
+      for (const line of String(text || "").split(/\r?\n/)) {
+        const t = line.trim();
+        if (!t) continue;
+        if (t.includes("|")) {
+          const [name, ...rest] = t.split("|");
+          const url = rest.join("|").trim();
+          if (url) out.push({ name: name.trim() || url, url });
+        } else if (/^https?:\/\//i.test(t)) {
+          out.push({ name: t, url: t });
+        }
+      }
+      return out;
+    }
 
-    const layer = L.layerGroup().addTo(map);
-    const markers = new Map();
+    function sourcesToText(sources) {
+      return (sources || [])
+        .map((s) => (s.name && s.name !== s.url ? `${s.name} | ${s.url}` : s.url))
+        .join("\n");
+    }
+
+    function renderSources(sources) {
+      const el = document.getElementById("sourcesView");
+      if (!sources || !sources.length) {
+        el.innerHTML = "";
+        return;
+      }
+      el.innerHTML =
+        "Sources: " +
+        sources
+          .map((s) => `<a href="${s.url}" target="_blank" rel="noopener">${s.name || s.url}</a>`)
+          .join(" · ");
+    }
+
+    function enrichAll() {
+      const nowSec = Math.floor(Date.now() / 1000);
+      enriched = digis.map((d) => {
+        const phg = decodePhg(d.phg);
+        const ageSec = nowSec - (+d.lasttime || 0);
+        const onAir = ageSec >= 0 && ageSec <= STALE_AFTER_SEC;
+        return {
+          ...d,
+          lat: Number(d.lat),
+          lng: Number(d.lng),
+          phgDecoded: phg,
+          phgRangeKm: phg ? Math.round(phg.rangeKm) : 50,
+          onAir,
+          ageDays: Math.max(0, Math.round(ageSec / 86400))
+        };
+      }).sort((a, b) => a.name.localeCompare(b.name));
+    }
 
     function currentRangeKm(d) {
       const mode = document.getElementById("rangeMode").value;
@@ -302,12 +436,11 @@
       const showCircles = document.getElementById("showCircles").checked;
       const showStale = document.getElementById("showStale").checked;
       const fill = document.getElementById("fillCircles").checked;
-
       const visible = enriched.filter((d) => showStale || d.onAir);
+
       visible.forEach((d) => {
         const color = d.onAir ? "#0b5f4b" : "#8a4b2a";
         const rKm = currentRangeKm(d);
-
         if (showCircles) {
           L.circle([d.lat, d.lng], {
             radius: rKm * 1000,
@@ -318,7 +451,6 @@
             fillOpacity: fill ? 0.12 : 0
           }).addTo(layer);
         }
-
         const m = L.circleMarker([d.lat, d.lng], {
           radius: 6,
           color: "#1c1a16",
@@ -326,11 +458,9 @@
           fillColor: color,
           fillOpacity: 1
         }).addTo(layer);
-
         const phgTxt = d.phgDecoded
           ? `${d.phgDecoded.powerW} W · HAAT ${d.phgDecoded.haatFt} ft · gain ${d.phgDecoded.gainDb} dB`
           : "n/a";
-
         m.bindPopup(
           `<strong>${d.name}</strong><br/>` +
           `${d.comment || ""}<br/>` +
@@ -338,7 +468,7 @@
           `PHG ${d.phg || "—"} → ~${d.phgRangeKm} km<br/>` +
           `${phgTxt}<br/>` +
           `Circle now: ${rKm} km<br/>` +
-          `<a href="https://aprs.fi/info/${d.name}" target="_blank" rel="noopener">aprs.fi info</a>`
+          `<a href="https://aprs.fi/info/${encodeURIComponent(d.name)}" target="_blank" rel="noopener">aprs.fi info</a>`
         );
         markers.set(d.name, m);
       });
@@ -350,6 +480,11 @@
         ? Math.round(visible.reduce((s, d) => s + d.phgRangeKm, 0) / visible.length)
         : 0;
       document.getElementById("statAvg").textContent = String(avg);
+      document.getElementById("fetchedAt").textContent =
+        `Data: ${fetchedAt} · ${enriched.length} station${enriched.length === 1 ? "" : "s"} on map`;
+      document.getElementById("missingNote").textContent = missing.length
+        ? `Not found by aprs.fi: ${missing.join(", ")}`
+        : "";
     }
 
     function buildList() {
@@ -370,8 +505,153 @@
       });
     }
 
-    document.getElementById("fetchedAt").textContent =
-      `Data fetched ${FETCHED_AT} · ${enriched.length} stations (VE1ZX not found)`;
+    function applyDigis(nextDigis, nextFetchedAt, nextMissing = []) {
+      digis = (nextDigis || []).map((d) => ({
+        name: d.name,
+        lat: Number(d.lat),
+        lng: Number(d.lng),
+        lasttime: Number(d.lasttime),
+        phg: d.phg || null,
+        comment: d.comment || ""
+      }));
+      fetchedAt = nextFetchedAt || new Date().toISOString();
+      missing = nextMissing || [];
+      enrichAll();
+      buildList();
+      redraw();
+      if (enriched.length) {
+        map.fitBounds(enriched.map((d) => [d.lat, d.lng]), { padding: [40, 40] });
+      }
+    }
+
+    function editorPayload() {
+      return {
+        title: document.getElementById("listTitle").value.trim(),
+        sources: parseSourcesText(document.getElementById("sourcesText").value),
+        callsigns: parseCallsignsText(document.getElementById("callsignsText").value),
+        notes: "One callsign per line. Add or remove digis anytime, then click Update map."
+      };
+    }
+
+    async function api(path, options) {
+      const res = await fetch(path, {
+        headers: { "Content-Type": "application/json" },
+        ...options
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      return data;
+    }
+
+    async function loadConfig() {
+      try {
+        const cfg = await api("/api/config");
+        serverAvailable = true;
+        document.getElementById("serverHint").textContent =
+          "Helper server connected. Paste your API key, edit callsigns if needed, then Update map.";
+        document.getElementById("listTitle").value = cfg.title || "";
+        document.getElementById("callsignsText").value = (cfg.callsigns || []).join("\n");
+        document.getElementById("sourcesText").value = sourcesToText(cfg.sources || []);
+        renderSources(cfg.sources || []);
+        if (cfg.snapshot && cfg.snapshot.length) {
+          const mtimeHint = "from digis-raw.json";
+          applyDigis(cfg.snapshot, mtimeHint, []);
+        } else {
+          applyDigis(FALLBACK_DIGIS, "bundled snapshot", []);
+        }
+      } catch {
+        serverAvailable = false;
+        document.getElementById("serverHint").textContent =
+          "Helper server not running — map shows saved snapshot only. Double-click start.bat, then refresh this page.";
+        document.getElementById("listTitle").value = "Nova Scotia MARCAN digipeaters";
+        document.getElementById("callsignsText").value = FALLBACK_DIGIS.map((d) => d.name).concat(["VE1ZX"]).join("\n");
+        document.getElementById("sourcesText").value =
+          "MARCAN APRS page (ve1cra.net) | http://ve1cra.net/aprs/\naprs.fi live map | https://aprs.fi/";
+        renderSources([
+          { name: "MARCAN APRS page (ve1cra.net)", url: "http://ve1cra.net/aprs/" },
+          { name: "aprs.fi live map", url: "https://aprs.fi/" }
+        ]);
+        applyDigis(FALLBACK_DIGIS, "bundled snapshot", []);
+      }
+    }
+
+    // Key helpers
+    const keyInput = document.getElementById("apiKey");
+    keyInput.value = localStorage.getItem(KEY_STORAGE) || "";
+    document.getElementById("showKey").addEventListener("change", (e) => {
+      keyInput.type = e.target.checked ? "text" : "password";
+    });
+    document.getElementById("saveKeyBtn").addEventListener("click", () => {
+      const key = keyInput.value.trim();
+      if (!key) {
+        setStatus("Paste an API key first.", "err");
+        return;
+      }
+      localStorage.setItem(KEY_STORAGE, key);
+      setStatus("API key remembered in this browser only.", "ok");
+    });
+    document.getElementById("clearKeyBtn").addEventListener("click", () => {
+      localStorage.removeItem(KEY_STORAGE);
+      keyInput.value = "";
+      setStatus("API key forgotten on this browser.", "ok");
+    });
+
+    document.getElementById("saveListBtn").addEventListener("click", async () => {
+      if (!serverAvailable) {
+        setStatus("Start the helper with start.bat first.", "err");
+        return;
+      }
+      try {
+        const payload = editorPayload();
+        if (!payload.callsigns.length) throw new Error("Add at least one callsign.");
+        const res = await api("/api/digi-list", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        renderSources(res.sources || payload.sources);
+        setStatus(`Saved ${res.callsigns.length} callsigns to digis-list.json.`, "ok");
+      } catch (err) {
+        setStatus(err.message, "err");
+      }
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", async () => {
+      if (!serverAvailable) {
+        setStatus("Start the helper with start.bat first, then refresh this page.", "err");
+        return;
+      }
+      const apiKey = keyInput.value.trim() || localStorage.getItem(KEY_STORAGE) || "";
+      if (!apiKey) {
+        setStatus("Paste your aprs.fi API key first.", "err");
+        return;
+      }
+      localStorage.setItem(KEY_STORAGE, apiKey);
+      const payload = editorPayload();
+      if (!payload.callsigns.length) {
+        setStatus("Add at least one callsign.", "err");
+        return;
+      }
+
+      const btn = document.getElementById("refreshBtn");
+      btn.disabled = true;
+      setStatus("Updating from aprs.fi…", "info");
+      try {
+        const res = await api("/api/refresh", {
+          method: "POST",
+          body: JSON.stringify({ apiKey, ...payload })
+        });
+        applyDigis(res.digis, res.fetchedAt, res.missing || []);
+        setStatus(
+          `Updated ${res.digis.length} of ${res.requested} callsigns.` +
+            (res.missing?.length ? ` Missing: ${res.missing.join(", ")}` : ""),
+          res.missing?.length ? "info" : "ok"
+        );
+      } catch (err) {
+        setStatus(err.message, "err");
+      } finally {
+        btn.disabled = false;
+      }
+    });
 
     ["showCircles", "showStale", "fillCircles", "rangeMode"].forEach((id) => {
       document.getElementById(id).addEventListener("change", redraw);
@@ -383,9 +663,7 @@
       if (pts.length) map.fitBounds(pts, { padding: [30, 30] });
     });
 
-    buildList();
-    redraw();
-    map.fitBounds(enriched.map((d) => [d.lat, d.lng]), { padding: [40, 40] });
+    loadConfig();
   </script>
 </body>
 </html>
